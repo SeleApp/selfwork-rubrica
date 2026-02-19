@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rubrica Contatti</title>
+    <style>
+      :root {
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      .actions {
+        margin: 16px 0;
+        display: flex;
+        gap: 8px;
+      }
+
+      button {
+        cursor: pointer;
+        border: 1px solid #ccc;
+        background: #fff;
+        border-radius: 6px;
+        padding: 8px 12px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background: #f0f0f0;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      form {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      form input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 8px;
+      }
+
+      .empty {
+        margin: 12px 0 0;
+        color: #666;
+      }
+
+      @media (max-width: 700px) {
+        form {
+          grid-template-columns: 1fr;
+        }
+
+        table {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>Rubrica</h1>
+
+      <div class="actions">
+        <button id="toggleListBtn" type="button">Nascondi lista contatti</button>
+      </div>
+
+      <section id="contactsSection">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Telefono</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="contactsTableBody"></tbody>
+        </table>
+        <p id="emptyState" class="empty hidden">Nessun contatto in rubrica.</p>
+      </section>
+
+      <h2 id="formTitle">Aggiungi nuovo contatto</h2>
+      <form id="contactForm">
+        <input id="name" type="text" placeholder="Nome" required />
+        <input id="email" type="email" placeholder="Email" required />
+        <input id="phone" type="tel" placeholder="Telefono" required />
+        <div class="form-actions">
+          <button id="saveBtn" type="submit">Aggiungi contatto</button>
+          <button id="cancelEditBtn" type="button" class="hidden">Annulla modifica</button>
+        </div>
+      </form>
+    </main>
+
+    <script src="main.js"></script>
+  </body>
+</html>
