@@ -1,128 +1,79 @@
-const contacts = [
-  { name: "Mario Rossi", email: "mario.rossi@email.it", phone: "3331234567" },
-  { name: "Luisa Bianchi", email: "luisa.bianchi@email.it", phone: "3477654321" },
-  { name: "Paolo Verdi", email: "paolo.verdi@email.it", phone: "3499999999" }
-];
+let nameInput = document.querySelector("#nameInput");
+let numberInput = document.querySelector("#numberInput");
 
-const contactsSection = document.getElementById("contactsSection");
-const toggleListBtn = document.getElementById("toggleListBtn");
-const contactsTableBody = document.getElementById("contactsTableBody");
-const emptyState = document.getElementById("emptyState");
+let btnShow = document.querySelector("#btnShow");
+let btnAdd = document.querySelector("#btnAdd");
+let btnRemove = document.querySelector("#btnRemove");
+let btnEdit = document.querySelector("#btnEdit");
 
-const contactForm = document.getElementById("contactForm");
-const formTitle = document.getElementById("formTitle");
-const nameInput = document.getElementById("name");
-const emailInput = document.getElementById("email");
-const phoneInput = document.getElementById("phone");
-const saveBtn = document.getElementById("saveBtn");
-const cancelEditBtn = document.getElementById("cancelEditBtn");
+let containerContact = document.querySelector(".containerContact");
 
-let isListVisible = true;
-let editingIndex = null;
+let rubrica = {
+  listaContatti: [
+    { name: "Mario", number: 12345 },
+    { name: "Valter", number: 67890 }
+  ],
+  showContact() {
+    containerContact.innerHTML = "";
 
-function renderContacts() {
-  contactsTableBody.innerHTML = "";
-
-  if (contacts.length === 0) {
-    emptyState.classList.remove("hidden");
-    return;
+    this.listaContatti.forEach((contatto) => {
+      let p = document.createElement("p");
+      p.innerHTML = `${contatto.name} - ${contatto.number}`;
+      containerContact.appendChild(p);
+    });
+  },
+  addContact(newName, newNumber) {
+    this.listaContatti.push({
+      name: newName,
+      number: newNumber
+    });
+  },
+  removeContact(removeName) {
+    let filtered = this.listaContatti.filter((contatto) => contatto.name != removeName);
+    this.listaContatti = filtered;
+  },
+  editContact(name, number) {
+    this.listaContatti.forEach((contatto) => {
+      if (contatto.name == name) {
+        contatto.number = number;
+      }
+    });
   }
+};
 
-  emptyState.classList.add("hidden");
+let check = false;
 
-  contacts.forEach((contact, index) => {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-      <td>${contact.name}</td>
-      <td>${contact.email}</td>
-      <td>${contact.phone}</td>
-      <td>
-        <button type="button" data-action="edit" data-index="${index}">Modifica</button>
-        <button type="button" data-action="delete" data-index="${index}">Elimina</button>
-      </td>
-    `;
-
-    contactsTableBody.appendChild(row);
-  });
-}
-
-function resetForm() {
-  contactForm.reset();
-  editingIndex = null;
-  formTitle.textContent = "Aggiungi nuovo contatto";
-  saveBtn.textContent = "Aggiungi contatto";
-  cancelEditBtn.classList.add("hidden");
-}
-
-toggleListBtn.addEventListener("click", () => {
-  isListVisible = !isListVisible;
-  contactsSection.classList.toggle("hidden", !isListVisible);
-  toggleListBtn.textContent = isListVisible
-    ? "Nascondi lista contatti"
-    : "Mostra lista contatti";
-});
-
-contactForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const newContact = {
-    name: nameInput.value.trim(),
-    email: emailInput.value.trim(),
-    phone: phoneInput.value.trim()
-  };
-
-  if (editingIndex === null) {
-    contacts.push(newContact);
+btnShow.addEventListener("click", () => {
+  if (check == false) {
+    rubrica.showContact();
+    btnShow.innerHTML = "Nascondi contatti";
+    check = true;
   } else {
-    contacts[editingIndex] = newContact;
-  }
-
-  renderContacts();
-  resetForm();
-});
-
-cancelEditBtn.addEventListener("click", resetForm);
-
-contactsTableBody.addEventListener("click", (event) => {
-  const target = event.target;
-
-  if (!(target instanceof HTMLButtonElement)) {
-    return;
-  }
-
-  const action = target.dataset.action;
-  const index = Number(target.dataset.index);
-
-  if (!Number.isInteger(index) || index < 0 || index >= contacts.length) {
-    return;
-  }
-
-  if (action === "delete") {
-    contacts.splice(index, 1);
-
-    if (editingIndex === index) {
-      resetForm();
-    } else if (editingIndex !== null && editingIndex > index) {
-      editingIndex -= 1;
-    }
-
-    renderContacts();
-    return;
-  }
-
-  if (action === "edit") {
-    const selected = contacts[index];
-    editingIndex = index;
-
-    nameInput.value = selected.name;
-    emailInput.value = selected.email;
-    phoneInput.value = selected.phone;
-
-    formTitle.textContent = "Modifica contatto";
-    saveBtn.textContent = "Salva modifiche";
-    cancelEditBtn.classList.remove("hidden");
+    containerContact.innerHTML = "";
+    btnShow.innerHTML = "Mostra contatti";
+    check = false;
   }
 });
 
-renderContacts();
+btnAdd.addEventListener("click", () => {
+  if (nameInput.value != "") {
+    rubrica.addContact(nameInput.value, numberInput.value);
+    nameInput.value = "";
+    numberInput.value = "";
+  }
+});
+
+btnRemove.addEventListener("click", () => {
+  if (nameInput.value != "") {
+    rubrica.removeContact(nameInput.value);
+    nameInput.value = "";
+  }
+});
+
+btnEdit.addEventListener("click", () => {
+  if (nameInput.value != "") {
+    rubrica.editContact(nameInput.value, numberInput.value);
+    nameInput.value = "";
+    numberInput.value = "";
+  }
+});
