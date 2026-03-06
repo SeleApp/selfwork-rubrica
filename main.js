@@ -13,6 +13,7 @@ let rubrica = {
     { name: "Mario", number: 12345 },
     { name: "Valter", number: 67890 }
   ],
+  isVisible: false,
   showContact() {
     containerContact.innerHTML = "";
 
@@ -27,10 +28,18 @@ let rubrica = {
       name: newName,
       number: newNumber
     });
+
+    if (this.isVisible) {
+      this.showContact();
+    }
   },
   removeContact(removeName) {
     let filtered = this.listaContatti.filter((contatto) => contatto.name != removeName);
     this.listaContatti = filtered;
+
+    if (this.isVisible) {
+      this.showContact();
+    }
   },
   editContact(name, number) {
     this.listaContatti.forEach((contatto) => {
@@ -38,20 +47,22 @@ let rubrica = {
         contatto.number = number;
       }
     });
+
+    if (this.isVisible) {
+      this.showContact();
+    }
   }
 };
 
-let check = false;
-
 btnShow.addEventListener("click", () => {
-  if (check == false) {
+  if (rubrica.isVisible == false) {
     rubrica.showContact();
     btnShow.innerHTML = "Nascondi contatti";
-    check = true;
+    rubrica.isVisible = true;
   } else {
     containerContact.innerHTML = "";
     btnShow.innerHTML = "Mostra contatti";
-    check = false;
+    rubrica.isVisible = false;
   }
 });
 
